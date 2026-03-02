@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Jisha 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: radial-gradient(circle at top,#ff4da6,#8e2de2,#1a0033);
+    color:white;
+    text-align:center;
+}
+
+.container{
+    z-index:2;
+    padding:20px;
+    max-width:500px;
+}
+
+h1{
+    font-size:40px;
+    font-weight:800;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow{
+    from{ text-shadow:0 0 15px #fff,0 0 25px #ff4da6;}
+    to{ text-shadow:0 0 30px #fff,0 0 60px #ff4da6;}
+}
+
+#typing{
+    margin-top:15px;
+    font-size:18px;
+    min-height:60px;
+}
+
+button{
+    margin-top:20px;
+    padding:12px 25px;
+    border:none;
+    border-radius:30px;
+    background:white;
+    color:#ff4da6;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.1);
+}
+
+/* Hearts */
+.heart{
+    position:absolute;
+    color:#ff4da6;
+    font-size:20px;
+    animation: fall linear infinite;
+}
+
+@keyframes fall{
+    0%{ transform:translateY(-10vh);}
+    100%{ transform:translateY(110vh);}
+}
+
+/* Balloons */
+.balloon{
+    position:absolute;
+    bottom:-120px;
+    width:50px;
+    height:70px;
+    border-radius:50%;
+    animation:float 12s infinite;
+}
+
+@keyframes float{
+    0%{ transform:translateY(0);}
+    100%{ transform:translateY(-120vh);}
+}
+
+/* Canvas */
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    pointer-events:none;
+}
+
+@media(max-width:480px){
+    h1{font-size:28px;}
+}
+</style>
+</head>
+<body>
+
+<audio id="music" autoplay loop>
+    <source src="https://www2.cs.uic.edu/~i101/SoundFiles/BirthdaySong.mp3" type="audio/mpeg">
+</audio>
+
+<canvas id="confetti"></canvas>
+
+<div class="container">
+    <h1>Happy Birthday Jisha 💖</h1>
+    <div id="typing"></div>
+    <button onclick="celebrate()">Celebrate 🎉</button>
+</div>
+
+<!-- Balloons -->
+<div class="balloon" style="left:15%; background:#ff4da6;"></div>
+<div class="balloon" style="left:45%; background:#ffd54f; animation-duration:15s;"></div>
+<div class="balloon" style="left:75%; background:#40c4ff; animation-duration:18s;"></div>
+
+<script>
+// Typing Effect
+const text = "May your life be filled with endless happiness, love, and beautiful moments Jisha 💕✨";
+let i=0;
+function type(){
+    if(i<text.length){
+        document.getElementById("typing").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(type,50);
+    }
+}
+type();
+
+// Heart Rain
+function createHeart(){
+    const heart=document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML="❤️";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.animationDuration=Math.random()*3+3+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),6000);
+}
+setInterval(createHeart,300);
+
+// Confetti
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let pieces=[];
+
+function randomColor(){
+    const colors=["#ff4da6","#ffd54f","#40c4ff","#ffffff"];
+    return colors[Math.floor(Math.random()*colors.length)];
+}
+
+function createPieces(){
+    for(let i=0;i<150;i++){
+        pieces.push({
+            x:Math.random()*canvas.width,
+            y:Math.random()*canvas.height-canvas.height,
+            size:Math.random()*8+4,
+            speed:Math.random()*3+2,
+            color:randomColor()
+        });
+    }
+}
+
+function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+        ctx.fillStyle=p.color;
+        ctx.fillRect(p.x,p.y,p.size,p.size);
+        p.y+=p.speed;
+        if(p.y>canvas.height){
+            p.y=-10;
+            p.x=Math.random()*canvas.width;
+        }
+    });
+    requestAnimationFrame(draw);
+}
+
+function celebrate(){
+    pieces=[];
+    createPieces();
+    draw();
+    document.getElementById("music").play();
+}
+
+window.addEventListener("resize",()=>{
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+});
+</script>
+
+</body>
+</html>
